@@ -2,7 +2,7 @@
 Speedml Python Package
 ========================
 
-Machine Learning Speed Starter
+Machine Learning Speed Start
 -------------------------------
 
 Speedml is a simple and powerful API to speed start your Machine Learning projects. It integrates best ML libraries and popular strategies used by top data scientists in an easy to use Python package.
@@ -15,14 +15,12 @@ Then all you need to do is include one package in your Jupyter Notebook project 
 
   from speedml import Speedml
 
-Now you can add your train and test datasets with one single command::
+Now you can configure the project datasets with one single command::
 
-  sml = Speedml(train = 'data/train.csv',
-                test = 'data/test.csv',
-                target = 'Survived',
-                uid = 'PassengerId')
+  sml = Speedml('data/train.csv', 'data/test.csv',
+                target = 'Survived', uid = 'PassengerId')
 
-Speedml enhances the sklearn API so you can reuse your knowledge::
+Speedml enhances popular API so the results and side effects are intuitive::
 
   sml.shape()
 
@@ -40,10 +38,13 @@ Using single commands you can perform multi-line Python operations::
   # Plot feature correlation graph
   sml.plot.correlate()
 
-  # Plot multiple subplots with feature distributions
+  # Plot subplots with feature distributions
   sml.plot.distribute()
 
-  # Replace empty values with numerical median or most common text
+  # Replace missing values with numerical median or most common text
   sml.feature.impute()
+
+  # Perform feature selection based on model assigned importance
+  sml.plot.importance()
 
 Please watch this space for more information about Speedml API including demos, sample Notebooks, and more code.
