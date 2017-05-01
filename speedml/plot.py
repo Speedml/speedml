@@ -1,3 +1,5 @@
+from speedml.base import Base
+
 import numpy as np
 import pandas as pd
 
@@ -6,31 +8,18 @@ import matplotlib.cm as cm
 import seaborn as sns
 
 import xgboost as xgb
+
 from sklearn.ensemble import ExtraTreesClassifier
 
-class Plot(object):
-    def __init__(self, train, test, target, uid):
-        '''
-        Only init the class variables which do not change during their lifetime.
-        Rest of the variables are set in the parent Speedml class when these are updated.
-        '''
-        self.train = train
-        self.test = test
-        self.target = target
-        self.uid = uid
-
-    def data_n(self):
-        self.train_n = self.train.select_dtypes(include=[np.number])
-        self.test_n = self.test.select_dtypes(include=[np.number])
-
+class Plot(Base):
     def distribute(self):
-        features = len(self.train_n.columns)
+        features = len(Base.train_n.columns)
         plt.figure()
-        self.train_n.hist(figsize=(features * 1.1, features * 1.1));
+        Base.train_n.hist(figsize=(features * 1.1, features * 1.1));
 
     def correlate(self):
-        corr = self.train_n.corr()
-        features = self.train_n.shape[1]
+        corr = Base.train_n.corr()
+        features = Base.train_n.shape[1]
         cell_size = features * 1.2 if features < 12 else features * 0.5
         plt.figure(figsize=(cell_size, cell_size))
         sns.heatmap(corr, vmax=1, annot=True if features < 12 else False, square=True)
@@ -38,14 +27,14 @@ class Plot(object):
 
     def ordinal(self, a):
         plt.figure(figsize=(8,4))
-        sns.violinplot(x=self.target, y=a, data=self.train_n)
-        plt.xlabel(self.target, fontsize=12)
+        sns.violinplot(x=Base.target, y=a, data=Base.train_n)
+        plt.xlabel(Base.target, fontsize=12)
         plt.ylabel(a, fontsize=12)
         plt.show();
 
     def continuous(self, a):
         plt.figure(figsize=(8,6))
-        plt.scatter(range(self.train_n.shape[0]), np.sort(self.train_n[a].values))
+        plt.scatter(range(Base.train_n.shape[0]), np.sort(Base.train_n[a].values))
         plt.xlabel('Samples', fontsize=12)
         plt.ylabel(a, fontsize=12)
         plt.show();
@@ -55,7 +44,7 @@ class Plot(object):
         plt.title('Classifier Accuracy')
 
         sns.set_color_codes("muted")
-        sns.barplot(x='Accuracy', y='Classifier', data=self.model_ranking, color="b");
+        sns.barplot(x='Accuracy', y='Classifier', data=Base.model_ranking, color="b");
 
     def _create_feature_map(self, features):
         outfile = open('data/xgb.fmap', 'w')
@@ -82,18 +71,16 @@ class Plot(object):
         plt.show()
 
     def importance(self):
-        self.data_n()
-        X = self.train_n
-        y = X[self.target].copy()
-        X = X.drop([self.target], axis=1)
+        X = Base.train_n
+        y = X[Base.target].copy()
+        X = X.drop([Base.target], axis=1)
         model = ExtraTreesClassifier()
         model.fit(X, y)
         self._plot_importance(X.columns, model.feature_importances_)
 
     def xgb_importance(self):
-        self.data_n()
-        X = self.train_n
-        X = X.drop([self.target], axis=1)
+        X = Base.train_n
+        X = X.drop([Base.target], axis=1)
         self._create_feature_map(X.columns)
-        fscore = self.xgb_model.booster().get_fscore(fmap='data/xgb.fmap')
+        fscore = Base.xgb_model.booster().get_fscore(fmap='data/xgb.fmap')
         self._plot_importance(list(fscore.keys()), list(fscore.values()))
