@@ -7,7 +7,7 @@ import re
 
 class Feature(Base):
     def drop(self, features):
-        '''
+        """
         Drop list of features from train and test datasets.
 
         Params
@@ -17,7 +17,7 @@ class Feature(Base):
         Side Effects
         ------------
         Updated numeric datasets with Base.data_n().
-        '''
+        """
         Base.train = Base.train.drop(features, axis=1)
         Base.test = Base.test.drop(features, axis=1)
         Base.data_n()
@@ -135,11 +135,11 @@ class Feature(Base):
         return ""
 
     def regex_extract(self, a, regex, new=None):
-        '''
+        """
         new: New feature to extract regex matched text. If new=None then replace existing feature specified by a.
         a: Existing feature to match regex.
         regex: Regular expression to use for matching and text extraction.
-        '''
+        """
         Base.train[new if new else a] = Base.train[a].apply(lambda x: self._regex_text(regex=regex, text=x))
         Base.test[new if new else a] = Base.test[a].apply(lambda x: self._regex_text(regex=regex, text=x))
 

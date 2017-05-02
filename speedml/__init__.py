@@ -21,9 +21,9 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 
 class Speedml(Base):
-    '''
+    """
     Speedml is a simple and powerful API wrapping best machine learning Python libraries and popular strategies used by top data scientists. Author @manavsehgal.
-    '''
+    """
     def __init__(self, train, test, target, uid=None):
         Base.target = target
 
@@ -49,9 +49,9 @@ class Speedml(Base):
             print('ERROR: SpeedML can only process .csv and .json files.')
 
     def shape(self):
-        '''
+        """
         Print shape (samples, features) of train, test datasets and number of numerical features in each dataset.
-        '''
+        """
         message = 'Shape: train {} test {}\n'
         message += 'Numerical: train_n ({}) test_n ({})'
         print(message.format(Base.train.shape,
