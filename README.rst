@@ -5,8 +5,6 @@ Speedml Python Package
 Machine Learning Speed Start
 -------------------------------
 
-  We are NOT live yet. Speedml Flow 0.8.0, our first public release is under rapid development and will be out soon.
-
 Speedml is a Python package to speed start machine learning projects. It integrates best ML packages and popular strategies used by top data scientists in an easy to use Python package.
 
 Get started by installing the Python package::

@@ -16,7 +16,7 @@ setup(
     author='Manav Sehgal',
     author_email='new@speedml.com',
     license='MIT',
-    keywords='machine-learning data-science jupyter-notebook workflow'
+    keywords='machine-learning data-science jupyter-notebook',
     packages=['speedml'],
     install_requires=[
       'pandas', 'numpy', 'seaborn', 'matplotlib',
