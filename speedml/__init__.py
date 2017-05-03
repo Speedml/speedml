@@ -1,3 +1,11 @@
+"""
+Speedml is a Python package to speed start machine learning projects. Author @manavsehgal. Docs https://speedml.com.
+"""
+
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *
+
 from speedml.base import Base
 from speedml.plot import Plot
 from speedml.feature import Feature

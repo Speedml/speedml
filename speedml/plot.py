@@ -1,3 +1,11 @@
+"""
+Speedml Plot component with methods that work on plots or the Exploratory Data Analysis (EDA) workflow. Author @manavsehgal. Docs https://speedml.com.
+"""
+
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *
+
 from speedml.base import Base
 
 import numpy as np

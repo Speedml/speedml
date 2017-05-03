@@ -1,6 +1,10 @@
 """
-Speedml Feature component with methods that work on features or  feature engineering. @manavsehgal
+Speedml Feature component with methods that work on features or the feature engineering workflow. Author @manavsehgal. Docs https://speedml.com.
 """
+
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *
 
 from speedml.base import Base
 from speedml.util import DataFrameImputer
@@ -37,7 +41,7 @@ class Feature(Base):
 
         end = Base.train.isnull().sum().sum()
         message = 'Imputed {} empty values to {}.'
-        return message.format(start, end)      
+        return message.format(start, end)
 
     def ordinal_to_numeric(self, a, map_to_numbers):
         Base.train[a] = Base.train[a].apply(lambda x: map_to_numbers[x])
