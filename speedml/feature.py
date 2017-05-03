@@ -1,3 +1,7 @@
+"""
+Speedml Feature component with methods that work on features or  feature engineering. @manavsehgal
+"""
+
 from speedml.base import Base
 from speedml.util import DataFrameImputer
 
@@ -8,21 +12,21 @@ import re
 class Feature(Base):
     def drop(self, features):
         """
-        Drop list of features from train and test datasets.
-
-        Params
-        ------
-        features: List of features to drop from train and test datasets.
-
-        Side Effects
-        ------------
-        Updated numeric datasets with Base.data_n().
+        Drop one or more list of strings naming ``features`` from train and test datasets.
         """
+        start = Base.train.shape[1]
+
         Base.train = Base.train.drop(features, axis=1)
         Base.test = Base.test.drop(features, axis=1)
         Base.data_n()
 
+        end = Base.train.shape[1]
+        message = 'Dropped {} features.'
+        return message.format(start - end)
+
     def impute(self):
+        start = Base.train.isnull().sum().sum()
+
         Base.test[Base.target] = -1
         combine = Base.train.append(Base.test)
         combine = DataFrameImputer().fit_transform(combine)
@@ -31,6 +35,10 @@ class Feature(Base):
         Base.test = Base.test.drop([Base.target], axis=1)
         Base.data_n()
 
+        end = Base.train.isnull().sum().sum()
+        message = 'Imputed {} empty values to {}.'
+        return message.format(start, end)      
+
     def ordinal_to_numeric(self, a, map_to_numbers):
         Base.train[a] = Base.train[a].apply(lambda x: map_to_numbers[x])
         Base.test[a] = Base.test[a].apply(lambda x: map_to_numbers[x])
@@ -38,26 +46,21 @@ class Feature(Base):
 
     def fillna(self, a, new):
         """
-        a: feature where to check for NaN values.
-        new: new value to replace the matched NaN values.
+        Fills empty or null values in ``a`` feature name with ``new`` string value.
         """
         Base.train[a] = Base.train[a].fillna(new)
         Base.test[a] = Base.test[a].fillna(new)
 
     def replace(self, a, match, new):
         """
-        a: feature where to replace text.
-        existing: string or list of strings to match.
-        new: new text to replace the matched string or list of strings.
+        In feature ``a`` values ``match`` string or list of strings and replace with a ``new`` string.
         """
         Base.train[a] = Base.train[a].replace(match, new)
         Base.test[a] = Base.test[a].replace(match, new)
 
     def outliers_fix(self, a, lower = None, upper = None):
         """
-        a = feature name
-        lower = percentile >0 but <100
-        upper = percentile <100 but >0
+        Fix outliers for ``lower`` or ``upper`` or both percentile of values within ``a`` feature.
         """
         if upper:
             upper_value = np.percentile(Base.train[a].values, upper)
@@ -136,9 +139,10 @@ class Feature(Base):
 
     def regex_extract(self, a, regex, new=None):
         """
-        new: New feature to extract regex matched text. If new=None then replace existing feature specified by a.
-        a: Existing feature to match regex.
-        regex: Regular expression to use for matching and text extraction.
+        Args:
+            a (str): Existing feature to match regex.
+            regex (str): Regular expression to use for matching and text extraction.
+            new (str): New feature to extract regex matched text. If new=None then replace existing feature specified by ``a``.
         """
         Base.train[new if new else a] = Base.train[a].apply(lambda x: self._regex_text(regex=regex, text=x))
         Base.test[new if new else a] = Base.test[a].apply(lambda x: self._regex_text(regex=regex, text=x))
