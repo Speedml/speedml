@@ -1,5 +1,5 @@
 """
-Speedml is a Python package to speed start machine learning projects. Author @manavsehgal. Docs https://speedml.com.
+Speedml is a Python package to speed start machine learning projects. Contact author https://twitter.com/manavsehgal. Code and demos https://github.com/Speedml.
 """
 
 from __future__ import (absolute_import, division,
@@ -29,9 +29,6 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LogisticRegression
 
 class Speedml(Base):
-    """
-    Speedml is a simple and powerful API wrapping best machine learning Python libraries and popular strategies used by top data scientists. Author @manavsehgal.
-    """
     def __init__(self, train, test, target, uid=None):
         Base.target = target
 

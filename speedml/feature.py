@@ -1,5 +1,5 @@
 """
-Speedml Feature component with methods that work on features or the feature engineering workflow. Author @manavsehgal. Docs https://speedml.com.
+Speedml Feature component with methods that work on dataset features or the feature engineering workflow. Contact author https://twitter.com/manavsehgal. Code and demos https://github.com/Speedml.
 """
 
 from __future__ import (absolute_import, division,
@@ -25,10 +25,13 @@ class Feature(Base):
         Base.data_n()
 
         end = Base.train.shape[1]
-        message = 'Dropped {} features.'
-        return message.format(start - end)
+        message = 'Dropped {} features with {} features available.'
+        return message.format(start - end, end)
 
     def impute(self):
+        """
+        Replace empty values in the entire dataframe with median value for numerical features and most common values for text features.
+        """
         start = Base.train.isnull().sum().sum()
 
         Base.test[Base.target] = -1
@@ -44,6 +47,9 @@ class Feature(Base):
         return message.format(start, end)
 
     def ordinal_to_numeric(self, a, map_to_numbers):
+        """
+        Convert text values for ordinal categorical feature ``a`` using ``map_to_numbers`` mapping dictionary.
+        """
         Base.train[a] = Base.train[a].apply(lambda x: map_to_numbers[x])
         Base.test[a] = Base.test[a].apply(lambda x: map_to_numbers[x])
         Base.data_n()
@@ -81,6 +87,9 @@ class Feature(Base):
             print('{} or {:.2f}% outliers fixed.'.format(change, change/Base.train.shape[0]*100))
 
     def density(self, a):
+        """
+        Create new feature named ``a`` feature name + suffix '_density', based on density or value_counts for each unique value in ``a`` feature.
+        """
         vals = Base.train[a].value_counts()
         dvals = vals.to_dict()
         Base.train[a + '_density'] = Base.train[a].apply(lambda x: dvals.get(x, vals.min()))
@@ -88,26 +97,41 @@ class Feature(Base):
         Base.data_n()
 
     def add(self, a, num):
+        """
+        Update ``a`` numeric feature by adding ``num`` number to each values.
+        """
         Base.train[a] = Base.train[a] + num
         Base.test[a] = Base.test[a] + num
         Base.data_n()
 
     def sum(self, new, a, b):
+        """
+        Create ``new`` numeric feature by adding ``a`` + ``b`` feature values.
+        """
         Base.train[new] = Base.train[a] + Base.train[b]
         Base.test[new] = Base.test[a] + Base.test[b]
         Base.data_n()
 
     def diff(self, new, a, b):
+        """
+        Create ``new`` numeric feature by subtracting ``a`` - ``b`` feature values.
+        """
         Base.train[new] = Base.train[a] - Base.train[b]
         Base.test[new] = Base.test[a] - Base.test[b]
         Base.data_n()
 
     def product(self, new, a, b):
+        """
+        Create ``new`` numeric feature by multiplying ``a`` * ``b`` feature values.
+        """
         Base.train[new] = Base.train[a] * Base.train[b]
         Base.test[new] = Base.test[a] * Base.test[b]
         Base.data_n()
 
     def divide(self, new, a, b):
+        """
+        Create ``new`` numeric feature by dividing ``a`` / ``b`` feature values. Replace division-by-zero with zero values.
+        """
         Base.train[new] = Base.train[a] / Base.train[b]
         Base.test[new] = Base.test[a] / Base.test[b]
         # Histograms require finite values
@@ -116,20 +140,32 @@ class Feature(Base):
         Base.data_n()
 
     def round(self, new, a, precision):
+        """
+        Create ``new`` numeric feature by rounding ``a`` feature value to ``precision`` decimal places.
+        """
         Base.train[new] = round(Base.train[a], precision)
         Base.test[new] = round(Base.test[a], precision)
         Base.data_n()
 
     def concat(self, new, a, sep, b):
+        """
+        Create ``new`` text feature by concatenating ``a`` and ``b`` text feature values, using ``sep`` separator.
+        """
         Base.train[new] = Base.train[a].astype(str) + sep + Base.train[b].astype(str)
         Base.test[new] = Base.test[a].astype(str) + sep + Base.test[b].astype(str)
 
     def list_len(self, new, a):
+        """
+        Create ``new`` numeric feature based on length or item count from ``a`` feature containing list object as values.
+        """
         Base.train[new] = Base.train[a].apply(len)
         Base.test[new] = Base.test[a].apply(len)
         Base.data_n()
 
     def word_count(self, new, a):
+        """
+        Create ``new`` numeric feature based on length or word count from ``a`` feature containing free-form text.
+        """
         Base.train[new] = Base.train[a].apply(lambda x: len(x.split(" ")))
         Base.test[new] = Base.test[a].apply(lambda x: len(x.split(" ")))
         Base.data_n()
@@ -143,15 +179,15 @@ class Feature(Base):
 
     def regex_extract(self, a, regex, new=None):
         """
-        Args:
-            a (str): Existing feature to match regex.
-            regex (str): Regular expression to use for matching and text extraction.
-            new (str): New feature to extract regex matched text. If new=None then replace existing feature specified by ``a``.
+        Match ``regex`` regular expression with ``a`` text feature values to update ``a`` feature with matching text if ``new`` = None. Otherwise create ``new`` feature based on matching text.
         """
         Base.train[new if new else a] = Base.train[a].apply(lambda x: self._regex_text(regex=regex, text=x))
         Base.test[new if new else a] = Base.test[a].apply(lambda x: self._regex_text(regex=regex, text=x))
 
     def labels(self, features):
+        """
+        Generate numerical labels replacing text values from list of categorical ``features``.
+        """
         Base.test[Base.target] = -1
         combine = Base.train.append(Base.test)
 

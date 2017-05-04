@@ -4,40 +4,40 @@ speedml package
 Submodules
 ----------
 
-speedml.base module
--------------------
+speedml\.base module
+--------------------
 
 .. automodule:: speedml.base
     :members:
     :undoc-members:
     :show-inheritance:
 
-speedml.feature module
-----------------------
+speedml\.feature module
+-----------------------
 
 .. automodule:: speedml.feature
     :members:
     :undoc-members:
     :show-inheritance:
 
-speedml.plot module
--------------------
+speedml\.plot module
+--------------------
 
 .. automodule:: speedml.plot
     :members:
     :undoc-members:
     :show-inheritance:
 
-speedml.util module
--------------------
+speedml\.util module
+--------------------
 
 .. automodule:: speedml.util
     :members:
     :undoc-members:
     :show-inheritance:
 
-speedml.xgb module
-------------------
+speedml\.xgb module
+-------------------
 
 .. automodule:: speedml.xgb
     :members:
