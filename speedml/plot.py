@@ -30,13 +30,14 @@ class Plot(Base):
 
     def correlate(self):
         """
-        Plot heatmap of relative correlation values for all numeric features. This helps understand if (a) certain features are redundant or duplicate with very high correlation among features, (b) certain features are more important for our model with high correlation to target feature, (c) certain features may not be as important with low correlation to target feature, (d) certain features may be over-fitting the model with very high correlation to the target feature.
+        Plot correlation matrix heatmap for numerical features of the training dataset. Use this plot to understand if certain features are duplicate, are of low importance, or possibly high importance for our model.
         """
         corr = Base.train_n.corr()
         features = Base.train_n.shape[1]
         cell_size = features * 1.2 if features < 12 else features * 0.5
         plt.figure(figsize=(cell_size, cell_size))
-        sns.heatmap(corr, vmax=1, annot=True if features < 12 else False, square=True)
+        sns.heatmap(corr, vmax=1, square=True,
+                    annot=True if features < 12 else False)
         plt.title('feature correlations in train_n dataset');
 
     def ordinal(self, a):
