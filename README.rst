@@ -11,7 +11,7 @@ Speedml is a Python package for speed starting machine learning projects.
 
 Latest Speedml release is always available on the PyPi_ website.
 
-Install Speedml package using `pip` using the following command::
+Install Speedml package using `pip` like so::
 
   pip install speedml
 
@@ -58,7 +58,7 @@ Call to this single method replaces empty values in the entire dataframe with me
 Productive. Intuitive linear workflow
 ---------------------------------------
 
-Learning machine learning fundamentals is a breeze with Speedml as we have designed the API to follow a linear workflow with sensible prerequisites and intuitive next steps.
+Understanding machine learning fundamentals is a breeze with Speedml as we have designed the API to follow a linear workflow with sensible prerequisites and intuitive next steps.
 
 These five lines of Speedml code perform feature engineering on four features of Titanic dataset::
 
@@ -74,6 +74,6 @@ Hope you enjoy using Speedml in your projects. Watch this space as we intend to 
 .. _documentation: http://pythonhosted.org/speedml/
 .. _speedml.com: https://speedml.com
 .. _repo: https://github.com/Speedml/speedml
-.. _project: https://github.com/Speedml/speedml/projects/1
+.. _roadmap: https://github.com/Speedml/speedml/projects/1
 .. _notebooks: https://github.com/Speedml/notebooks
 .. _Issues: https://github.com/Speedml/speedml/issues
