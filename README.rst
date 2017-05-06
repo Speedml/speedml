@@ -7,22 +7,22 @@ Machine Learning Speed Start
 
   Bringing together speed and craft is an awesome experience...
 
-Speedml is a Python package for speed starting machine learning projects.
+Speedml is a `Python package<https://pypi.python.org/pypi/speedml>`_ for speed starting machine learning projects.
 
 Install Speedml package using `pip` using the following command::
 
   pip install speedml
 
-Minimal `method level documentation<http://pythonhosted.org/speedml/>` is available with every new release.
+Minimal `method level documentation<http://pythonhosted.org/speedml/>`_ is available with every new release.
 
-  The `Speedml.com<https://speedml.com>` website documents API use cases, features, best practices, and demos in much more detail.
+  The `Speedml.com<https://speedml.com>`_ website documents API use cases, features, best practices, and demos in much more detail.
 
 Speedml is open source and available under MIT license. We manage the project on GitHub.
 
-- `GitHub repo<https://github.com/Speedml/speedml>`
-- `Project roadmap<https://github.com/Speedml/speedml/projects/1>`
-- `Issues tracking<https://github.com/Speedml/speedml/issues>`
-- `Demo notebooks<https://github.com/Speedml/notebooks>`
+- `GitHub repo<https://github.com/Speedml/speedml>`_
+- `Project roadmap<https://github.com/Speedml/speedml/projects/1>`_
+- `Issues tracking<https://github.com/Speedml/speedml/issues>`_
+- `Demo notebooks<https://github.com/Speedml/notebooks>`_
 
 We are authoring Speedml API with four goals in mind.
 
