@@ -1,5 +1,5 @@
 """
-Speedml Plot component with methods that work on plots or the Exploratory Data Analysis (EDA) workflow. Contact author https://twitter.com/manavsehgal. Code and demos https://github.com/Speedml.
+Speedml Plot component with methods that work on plots or the Exploratory Data Analysis (EDA) workflow. Contact author https://twitter.com/manavsehgal. Code, docs and demos https://speedml.com.
 """
 
 from __future__ import (absolute_import, division,
@@ -20,6 +20,12 @@ import xgboost as xgb
 from sklearn.ensemble import ExtraTreesClassifier
 
 class Plot(Base):
+    def crosstab(self, a, b):
+        """
+        Return a dataframe cross-tabulating values from feature ``a`` and ``b``.
+        """
+        return pd.crosstab(Base.train[a], Base.train[b])
+
     def distribute(self):
         """
         Plot multiple feature distribution histogram plots for all numeric features. This helps understand skew of distribution from normal to quickly and relatively identify outliers in the dataset.

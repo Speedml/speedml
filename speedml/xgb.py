@@ -1,5 +1,5 @@
 """
-Speedml Xgb component with methods that work on XGBoost model workflow. Contact author https://twitter.com/manavsehgal. Code and demos https://github.com/Speedml.
+Speedml Xgb component with methods that work on XGBoost model workflow. Contact author https://twitter.com/manavsehgal. Code, docs and demos https://speedml.com.
 """
 
 from __future__ import (absolute_import, division,
@@ -9,10 +9,29 @@ from builtins import *
 from speedml.base import Base
 
 import pandas as pd
+import numpy as np
 import xgboost as xgb
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import SelectFromModel
 
 class Xgb(Base):
+    def sample_accuracy(self):
+        """
+        Calculate the accuracy of an XGBoost model based on number of correct labels in prediction.
+        """
+        train_preds = Base.xgb_model.predict(Base.train_X)
+        rounded_preds = np.round(train_preds).astype(int).flatten()
+        correct = np.where(rounded_preds == Base.train_y)[0]
+        correct_labels = len(correct)
+        total_labels = Base.train_y.shape[0]
+        self.accuracy = round(correct_labels / total_labels * 100, 2)
+        message = 'Accuracy = {}%. Found {} correct of {} total labels'
+        return message.format(self.accuracy,
+                              correct_labels,
+                              total_labels)
+
     def hyper(self, select_params, fixed_params):
         """
         Tune XGBoost hyper-parameters by selecting from permutations of values from the ``select_params`` dictionary. Remaining parameters with single values are specified by the ``fixed_params`` dictionary. Returns a dataframe with ranking of ``select_params`` items.
@@ -56,3 +75,41 @@ class Xgb(Base):
         Sets xgb.predictions with predictions from the XGBoost model.
         """
         self.predictions = Base.xgb_model.predict(Base.test_X)
+
+    def feature_selection(self):
+        """
+        Returns threshold and accuracy for ``n`` number of features.
+        """
+        X = Base.train_n.drop([Base.target], axis=1)
+        Y = Base.train[Base.target]
+
+        # Split data into train and test sets
+        X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=7)
+
+        # Fit model on all training data
+        model = xgb.XGBClassifier()
+        model.fit(X_train, y_train)
+
+        # Make predictions for test data and evaluate
+        y_pred = model.predict(X_test)
+        predictions = [round(value) for value in y_pred]
+        accuracy = accuracy_score(y_test, predictions)
+        print("Accuracy: %.2f%%" % (accuracy * 100.0))
+
+        # Fit model using each importance as a threshold
+        thresholds = np.sort(model.feature_importances_)
+        for thresh in thresholds:
+        	# Select features using threshold
+        	selection = SelectFromModel(model, threshold=thresh, prefit=True)
+        	select_X_train = selection.transform(X_train)
+
+        	# Train model
+        	selection_model = xgb.XGBClassifier()
+        	selection_model.fit(select_X_train, y_train)
+
+        	# Evalation model
+        	select_X_test = selection.transform(X_test)
+        	y_pred = selection_model.predict(select_X_test)
+        	predictions = [round(value) for value in y_pred]
+        	accuracy = accuracy_score(y_test, predictions)
+        	print ("Thresh=%.3f, n=%d, Accuracy: %.2f%%" % (thresh, select_X_train.shape[1], accuracy*100.0))

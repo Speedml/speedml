@@ -1,9 +1,6 @@
-========================
-Speedml Python Package
-========================
-
-Machine Learning Speed Start
--------------------------------
+======================================
+Speedml Machine Learning Speed Start
+======================================
 
   Bringing together speed and craft is an awesome experience...
 
@@ -15,9 +12,7 @@ Install Speedml package using `pip` like so::
 
   pip install speedml
 
-Minimal method level documentation_ is available with every new release.
-
-  The speedml.com_ website documents API use cases, features, best practices, and demos in much more detail.
+The speedml.com_ website documents API use cases, behind-the-scenes implementation, features, best practices, and demos in detail.
 
 Speedml is open source and available under MIT license. We manage the project on GitHub.
 
@@ -60,13 +55,11 @@ Productive. Intuitive linear workflow
 
 Understanding machine learning fundamentals is a breeze with Speedml as we have designed the API to follow a linear workflow with sensible prerequisites and intuitive next steps.
 
-These five lines of Speedml code perform feature engineering on four features of Titanic dataset::
+These three lines of Speedml code perform feature engineering by replacing null values, extracting a new feature matching a regular expression, and dropping a feature that is no longer required::
 
   sml.feature.fillna(a='Cabin', new='Z')
-  sml.feature.regex_extract(new='Deck', a='Cabin', regex='([A-Z]){1}')
-  sml.feature.ordinal_to_numeric('Sex', {'male': 0, 'female': 1})
-  sml.feature.sum(new='FamilySize', a='Parch', b='SibSp')
-  sml.feature.add('FamilySize', 1)
+  sml.feature.extract(new='Deck', a='Cabin', regex='([A-Z]){1}')
+  sml.feature.drop(['Cabin'])
 
 Hope you enjoy using Speedml in your projects. Watch this space as we intend to update Speedml frequently with more cool features.
 

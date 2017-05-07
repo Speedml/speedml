@@ -1,5 +1,5 @@
 """
-Speedml utility methods. Contact author https://twitter.com/manavsehgal. Code and demos https://github.com/Speedml.
+Speedml utility methods. Contact author https://twitter.com/manavsehgal. Code, docs and demos https://speedml.com.
 """
 
 import pandas as pd

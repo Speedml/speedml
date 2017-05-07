@@ -1,5 +1,5 @@
 """
-Speedml Feature component with methods that work on dataset features or the feature engineering workflow. Contact author https://twitter.com/manavsehgal. Code and demos https://github.com/Speedml.
+Speedml Feature component with methods that work on dataset features or the feature engineering workflow. Contact author https://twitter.com/manavsehgal. Code, docs and demos https://speedml.com.
 """
 
 from __future__ import (absolute_import, division,
@@ -46,29 +46,45 @@ class Feature(Base):
         message = 'Imputed {} empty values to {}.'
         return message.format(start, end)
 
-    def ordinal_to_numeric(self, a, map_to_numbers):
+    def mapping(self, a, data):
         """
-        Convert text values for ordinal categorical feature ``a`` using ``map_to_numbers`` mapping dictionary.
+        Convert values for categorical feature ``a`` using ``data`` dictionary. Use when number of categories are limited otherwise use labels.
         """
-        Base.train[a] = Base.train[a].apply(lambda x: map_to_numbers[x])
-        Base.test[a] = Base.test[a].apply(lambda x: map_to_numbers[x])
+        Base.train[a] = Base.train[a].apply(lambda x: data[x])
+        Base.test[a] = Base.test[a].apply(lambda x: data[x])
         Base.data_n()
 
     def fillna(self, a, new):
         """
         Fills empty or null values in ``a`` feature name with ``new`` string value.
         """
+        start = Base.train[a].isnull().sum() + Base.test[a].isnull().sum()
+
         Base.train[a] = Base.train[a].fillna(new)
         Base.test[a] = Base.test[a].fillna(new)
+
+        message = 'Filled {} null values across test and train datasets.'
+        return message.format(start)
 
     def replace(self, a, match, new):
         """
         In feature ``a`` values ``match`` string or list of strings and replace with a ``new`` string.
         """
+        if type(match) is str:
+            # [TODO] What is the performance cost of message ops?
+            start = Base.train[Base.train[a] == match][a].shape[0] + Base.test[Base.test[a] == match][a].shape[0]
+            message = 'Replaced {} matching values across train and test datasets.'
+            message = message.format(start)
+        else:
+            # [TODO] Can we possibly use pandas.isin to check counts?
+            message = 'Replaced matching list of strings across train and test datasets.'
+
         Base.train[a] = Base.train[a].replace(match, new)
         Base.test[a] = Base.test[a].replace(match, new)
 
-    def outliers_fix(self, a, lower = None, upper = None):
+        return message
+
+    def outliers(self, a, lower = None, upper = None):
         """
         Fix outliers for ``lower`` or ``upper`` or both percentile of values within ``a`` feature.
         """
@@ -77,14 +93,16 @@ class Feature(Base):
             change = Base.train.loc[Base.train[a] > upper_value, a].shape[0]
             Base.train.loc[Base.train[a] > upper_value, a] = upper_value
             Base.data_n()
-            print('{} or {:.2f}% outliers fixed.'.format(change, change/Base.train.shape[0]*100))
+            message = '{} or {:.2f}% upper outliers fixed. '.format(change, change/Base.train.shape[0]*100)
 
         if lower:
             lower_value = np.percentile(Base.train[a].values, lower)
             change = Base.train.loc[Base.train[a] < lower_value, a].shape[0]
             Base.train.loc[Base.train[a] < lower_value, a] = lower_value
             Base.data_n()
-            print('{} or {:.2f}% outliers fixed.'.format(change, change/Base.train.shape[0]*100))
+            message = message + '{} or {:.2f}% lower outliers fixed.'.format(change, change/Base.train.shape[0]*100)
+
+        return message
 
     def density(self, a):
         """
@@ -177,7 +195,7 @@ class Feature(Base):
             return regex_search.group(1)
         return ""
 
-    def regex_extract(self, a, regex, new=None):
+    def extract(self, a, regex, new=None):
         """
         Match ``regex`` regular expression with ``a`` text feature values to update ``a`` feature with matching text if ``new`` = None. Otherwise create ``new`` feature based on matching text.
         """
