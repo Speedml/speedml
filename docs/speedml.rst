@@ -20,6 +20,14 @@ speedml\.feature module
     :undoc-members:
     :show-inheritance:
 
+speedml\.model module
+---------------------
+
+.. automodule:: speedml.model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 speedml\.plot module
 --------------------
 
