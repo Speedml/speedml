@@ -20,11 +20,31 @@ import xgboost as xgb
 from sklearn.ensemble import ExtraTreesClassifier
 
 class Plot(Base):
-    def crosstab(self, a, b):
+    def crosstab(self, x, y):
         """
-        Return a dataframe cross-tabulating values from feature ``a`` and ``b``.
+        Return a dataframe cross-tabulating values from feature ``x`` and ``y``.
         """
-        return pd.crosstab(Base.train[a], Base.train[b])
+        return pd.crosstab(Base.train[x], Base.train[y])
+
+    def bar(self, x, y):
+        """
+        Bar plot ``x`` across ``y`` feature values.
+        """
+        plt.figure(figsize=(8,4))
+        sns.barplot(x, y, data=Base.train)
+        plt.xlabel(x, fontsize=12)
+        plt.ylabel(y, fontsize=12)
+        plt.show();
+
+    def strip(self, x, y):
+        """
+        Stripplot plot ``x`` across ``y`` feature values.
+        """
+        plt.figure(figsize=(8,4))
+        sns.stripplot(x, y, hue=Base.target, data=Base.train, jitter=True)
+        plt.xlabel(x, fontsize=12)
+        plt.ylabel(y, fontsize=12)
+        plt.show();
 
     def distribute(self):
         """
@@ -46,24 +66,24 @@ class Plot(Base):
                     annot=True if features < 12 else False)
         plt.title('feature correlations in train_n dataset');
 
-    def ordinal(self, a):
+    def ordinal(self, y):
         """
         Plot ordinal features (categorical numeric) using Violin plot against target feature. Use this to determine outliers within ordinal features spread across associated target feature values.
         """
         plt.figure(figsize=(8,4))
-        sns.violinplot(x=Base.target, y=a, data=Base.train_n)
+        sns.violinplot(x=Base.target, y=y, data=Base.train_n)
         plt.xlabel(Base.target, fontsize=12)
-        plt.ylabel(a, fontsize=12)
+        plt.ylabel(y, fontsize=12)
         plt.show();
 
-    def continuous(self, a):
+    def continuous(self, y):
         """
         Plot continuous features (numeric) using scatter plot. Use this to determine outliers within continuous features.
         """
         plt.figure(figsize=(8,6))
-        plt.scatter(range(Base.train_n.shape[0]), np.sort(Base.train_n[a].values))
+        plt.scatter(range(Base.train_n.shape[0]), np.sort(Base.train_n[y].values))
         plt.xlabel('Samples', fontsize=12)
-        plt.ylabel(a, fontsize=12)
+        plt.ylabel(y, fontsize=12)
         plt.show();
 
     def model_ranks(self):
@@ -77,7 +97,7 @@ class Plot(Base):
         sns.barplot(x='Accuracy', y='Classifier', data=Base.model_ranking, color="b");
 
     def _create_feature_map(self, features):
-        outfile = open('data/xgb.fmap', 'w')
+        outfile = open(Base.outpath + 'xgb.fmap', 'w')
         i = 0
         for feat in features:
             outfile.write('{0}\t{1}\tq\n'.format(i, feat))
@@ -118,5 +138,5 @@ class Plot(Base):
         X = Base.train_n
         X = X.drop([Base.target], axis=1)
         self._create_feature_map(X.columns)
-        fscore = Base.xgb_model.booster().get_fscore(fmap='data/xgb.fmap')
+        fscore = Base.xgb_model.booster().get_fscore(fmap=Base.outpath + 'xgb.fmap')
         self._plot_importance(list(fscore.keys()), list(fscore.values()))

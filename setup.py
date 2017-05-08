@@ -9,7 +9,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='speedml',
-    version='0.9.0',
+    version='0.9.1',
     description='Speedml Machine Learning Speed Start',
     long_description=long_description,
     url='https://speedml.com',
