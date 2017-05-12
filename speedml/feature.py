@@ -93,14 +93,14 @@ class Feature(Base):
             change = Base.train.loc[Base.train[a] > upper_value, a].shape[0]
             Base.train.loc[Base.train[a] > upper_value, a] = upper_value
             Base.data_n()
-            message = '{} or {:.2f}% upper outliers fixed. '.format(change, change/Base.train.shape[0]*100)
+            message = 'Fixed {} or {:.2f}% upper outliers. '.format(change, change/Base.train.shape[0]*100)
 
         if lower:
             lower_value = np.percentile(Base.train[a].values, lower)
             change = Base.train.loc[Base.train[a] < lower_value, a].shape[0]
             Base.train.loc[Base.train[a] < lower_value, a] = lower_value
             Base.data_n()
-            message = message + '{} or {:.2f}% lower outliers fixed.'.format(change, change/Base.train.shape[0]*100)
+            message = message + 'Fixed {} or {:.2f}% lower outliers.'.format(change, change/Base.train.shape[0]*100)
 
         return message
 

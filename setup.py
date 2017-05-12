@@ -4,12 +4,14 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+# encoding is not supported in py27
+# with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst')) as f:
     long_description = f.read()
 
 setup(
     name='speedml',
-    version='0.9.1',
+    version='0.9.2',
     description='Speedml Machine Learning Speed Start',
     long_description=long_description,
     url='https://speedml.com',
@@ -20,7 +22,7 @@ setup(
     packages=['speedml'],
     install_requires=[
       'pandas', 'numpy', 'seaborn', 'matplotlib',
-      'sklearn', 'xgboost'
+      'sklearn', 'xgboost', 'future'
     ],
     zip_safe=False,
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers

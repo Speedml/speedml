@@ -26,9 +26,9 @@ class Xgb(Base):
         correct = np.where(rounded_preds == Base.train_y)[0]
         correct_labels = len(correct)
         total_labels = Base.train_y.shape[0]
-        self.accuracy = round(correct_labels / total_labels * 100, 2)
+        self.sample_accuracy = round(correct_labels / total_labels * 100, 2)
         message = 'Accuracy = {}%. Found {} correct of {} total labels'
-        return message.format(self.accuracy,
+        return message.format(self.sample_accuracy,
                               correct_labels,
                               total_labels)
 
@@ -51,6 +51,7 @@ class Xgb(Base):
             params = grid_params, dtrain = xgdmat,
             num_boost_round = 1000, nfold = 5,
             metrics = ['error'], early_stopping_rounds = 20)
+        self.error = self.cv_results.get_value(len(self.cv_results) - 1, 'test-error-mean')
 
     def params(self, params):
         """
@@ -94,7 +95,8 @@ class Xgb(Base):
         y_pred = model.predict(X_test)
         predictions = [round(value) for value in y_pred]
         accuracy = accuracy_score(y_test, predictions)
-        print("Accuracy: %.2f%%" % (accuracy * 100.0))
+        self.feature_accuracy = round(accuracy * 100.0, 2)
+        print("Accuracy: %f%%" % (self.feature_accuracy))
 
         # Fit model using each importance as a threshold
         thresholds = np.sort(model.feature_importances_)

@@ -85,4 +85,5 @@ class Model(Base):
         """
         Returns DataFrame of model ranking sorted by Accuracy.
         """
+        self.xgb_accuracy = Base.model_ranking[Base.model_ranking['Classifier'] == 'XGBClassifier']['Accuracy'][0]
         return Base.model_ranking.sort_values(by='Accuracy', ascending=False)
