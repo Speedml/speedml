@@ -22,7 +22,6 @@ class Feature(Base):
 
         Base.train = Base.train.drop(features, axis=1)
         Base.test = Base.test.drop(features, axis=1)
-        Base.data_n()
 
         end = Base.train.shape[1]
         message = 'Dropped {} features with {} features available.'
@@ -40,7 +39,6 @@ class Feature(Base):
         Base.train = combine[0:Base.train.shape[0]]
         Base.test = combine[Base.train.shape[0]::]
         Base.test = Base.test.drop([Base.target], axis=1)
-        Base.data_n()
 
         end = Base.train.isnull().sum().sum()
         message = 'Imputed {} empty values to {}.'
@@ -52,7 +50,6 @@ class Feature(Base):
         """
         Base.train[a] = Base.train[a].apply(lambda x: data[x])
         Base.test[a] = Base.test[a].apply(lambda x: data[x])
-        Base.data_n()
 
     def fillna(self, a, new):
         """
@@ -92,27 +89,32 @@ class Feature(Base):
             upper_value = np.percentile(Base.train[a].values, upper)
             change = Base.train.loc[Base.train[a] > upper_value, a].shape[0]
             Base.train.loc[Base.train[a] > upper_value, a] = upper_value
-            Base.data_n()
             message = 'Fixed {} or {:.2f}% upper outliers. '.format(change, change/Base.train.shape[0]*100)
 
         if lower:
             lower_value = np.percentile(Base.train[a].values, lower)
             change = Base.train.loc[Base.train[a] < lower_value, a].shape[0]
             Base.train.loc[Base.train[a] < lower_value, a] = lower_value
-            Base.data_n()
             message = message + 'Fixed {} or {:.2f}% lower outliers.'.format(change, change/Base.train.shape[0]*100)
 
         return message
 
-    def density(self, a):
-        """
-        Create new feature named ``a`` feature name + suffix '_density', based on density or value_counts for each unique value in ``a`` feature.
-        """
+    def _density_by_feature(self, a):
         vals = Base.train[a].value_counts()
         dvals = vals.to_dict()
         Base.train[a + '_density'] = Base.train[a].apply(lambda x: dvals.get(x, vals.min()))
         Base.test[a + '_density'] = Base.test[a].apply(lambda x: dvals.get(x, vals.min()))
-        Base.data_n()
+
+    def density(self, a):
+        """
+        Create new feature named ``a`` feature name + suffix '_density', based on density or value_counts for each unique value in ``a`` feature specified as a string or multiple features as a list of strings.
+        """
+        if isinstance(a, str):
+            self._density_by_feature(a)
+
+        if isinstance(a, list):
+            for feature in a:
+                self._density_by_feature(feature)
 
     def add(self, a, num):
         """
@@ -120,7 +122,6 @@ class Feature(Base):
         """
         Base.train[a] = Base.train[a] + num
         Base.test[a] = Base.test[a] + num
-        Base.data_n()
 
     def sum(self, new, a, b):
         """
@@ -128,7 +129,6 @@ class Feature(Base):
         """
         Base.train[new] = Base.train[a] + Base.train[b]
         Base.test[new] = Base.test[a] + Base.test[b]
-        Base.data_n()
 
     def diff(self, new, a, b):
         """
@@ -136,7 +136,6 @@ class Feature(Base):
         """
         Base.train[new] = Base.train[a] - Base.train[b]
         Base.test[new] = Base.test[a] - Base.test[b]
-        Base.data_n()
 
     def product(self, new, a, b):
         """
@@ -144,7 +143,6 @@ class Feature(Base):
         """
         Base.train[new] = Base.train[a] * Base.train[b]
         Base.test[new] = Base.test[a] * Base.test[b]
-        Base.data_n()
 
     def divide(self, new, a, b):
         """
@@ -155,7 +153,6 @@ class Feature(Base):
         # Histograms require finite values
         Base.train[new] = Base.train[new].replace([np.inf, -np.inf], 0)
         Base.test[new] = Base.test[new].replace([np.inf, -np.inf], 0)
-        Base.data_n()
 
     def round(self, new, a, precision):
         """
@@ -163,7 +160,6 @@ class Feature(Base):
         """
         Base.train[new] = round(Base.train[a], precision)
         Base.test[new] = round(Base.test[a], precision)
-        Base.data_n()
 
     def concat(self, new, a, sep, b):
         """
@@ -178,7 +174,6 @@ class Feature(Base):
         """
         Base.train[new] = Base.train[a].apply(len)
         Base.test[new] = Base.test[a].apply(len)
-        Base.data_n()
 
     def word_count(self, new, a):
         """
@@ -186,7 +181,6 @@ class Feature(Base):
         """
         Base.train[new] = Base.train[a].apply(lambda x: len(x.split(" ")))
         Base.test[new] = Base.test[a].apply(lambda x: len(x.split(" ")))
-        Base.data_n()
 
     def _regex_text(self, regex, text):
         regex_search = re.search(regex, text)
@@ -216,4 +210,3 @@ class Feature(Base):
         Base.train = combine[0:Base.train.shape[0]]
         Base.test = combine[Base.train.shape[0]::]
         Base.test = Base.test.drop([Base.target], axis=1)
-        Base.data_n()

@@ -81,6 +81,7 @@ class Xgb(Base):
         """
         Returns threshold and accuracy for ``n`` number of features.
         """
+        Base.data_n()
         X = Base.train_n.drop([Base.target], axis=1)
         Y = Base.train[Base.target]
 

@@ -11,7 +11,7 @@ with open(path.join(here, 'README.rst')) as f:
 
 setup(
     name='speedml',
-    version='0.9.2',
+    version='0.9.3',
     description='Speedml Machine Learning Speed Start',
     long_description=long_description,
     url='https://speedml.com',

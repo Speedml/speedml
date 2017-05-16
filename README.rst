@@ -2,9 +2,11 @@
 Speedml Machine Learning Speed Start
 ======================================
 
-  Bringing together speed and craft is an awesome experience...
-
 Speedml is a Python package for speed starting machine learning projects.
+
+The speedml.com_ website documents API use cases, behind-the-scenes implementation, features, best practices, and demos in detail.
+
+  To see Speedml in action run or download the notebook_ `Titanic Solution Using Speedml` which walks through an end-to-end machine learning solution documenting features of the Speedml API.
 
 Latest Speedml release is always available on the PyPi_ website.
 
@@ -12,14 +14,12 @@ Install Speedml package using `pip` like so::
 
   pip install speedml
 
-The speedml.com_ website documents API use cases, behind-the-scenes implementation, features, best practices, and demos in detail.
+We manage the project on GitHub.
 
-Speedml is open source and available under MIT license. We manage the project on GitHub.
-
+- Demo notebooks_
 - GitHub repo_
 - Project roadmap_
 - Issues_ tracking
-- Demo notebooks_
 
 We are authoring Speedml API with four goals in mind.
 
@@ -35,11 +35,12 @@ Rapid. Machine learning speed start
 
 Coding is up to 3X faster when using Speedml because of (1) iterative development, (2) linear workflow, and (3) component-based API.
 
-These two lines of Speedml code (a) load the training, test datasets, (b) define the target and unique id features, (c) plot the feature correlation matrix heatmap for numerical features::
+These three lines of Speedml code (a) load the training, test datasets, (b) define the target and unique id features, (c) plot the feature correlation matrix heatmap for numerical features, (d) perform a detailed EDA returning 10-15 observations and next steps for making the datasets model ready::
 
   sml = Speedml('train.csv', 'test.csv',
                 target='Survived', uid='PassengerId')
   sml.plot.correlate()
+  sml.eda()
 
 Easy. Concise commands with sensible defaults
 ----------------------------------------------
@@ -70,3 +71,4 @@ Hope you enjoy using Speedml in your projects. Watch this space as we intend to 
 .. _roadmap: https://github.com/Speedml/speedml/projects/1
 .. _notebooks: https://github.com/Speedml/notebooks
 .. _Issues: https://github.com/Speedml/speedml/issues
+.. _notebook: https://github.com/Speedml/notebooks/blob/master/titanic/titanic-solution-using-speedml.ipynb

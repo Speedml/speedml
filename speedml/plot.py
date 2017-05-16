@@ -50,6 +50,7 @@ class Plot(Base):
         """
         Plot multiple feature distribution histogram plots for all numeric features. This helps understand skew of distribution from normal to quickly and relatively identify outliers in the dataset.
         """
+        Base.data_n()
         features = len(Base.train_n.columns)
         plt.figure()
         Base.train_n.hist(figsize=(features * 1.1, features * 1.1));
@@ -58,18 +59,20 @@ class Plot(Base):
         """
         Plot correlation matrix heatmap for numerical features of the training dataset. Use this plot to understand if certain features are duplicate, are of low importance, or possibly high importance for our model.
         """
+        Base.data_n()
         corr = Base.train_n.corr()
         features = Base.train_n.shape[1]
-        cell_size = features * 1.2 if features < 12 else features * 0.5
+        cell_size = features * 1.2 if features < 9 else features * 0.5
         plt.figure(figsize=(cell_size, cell_size))
-        sns.heatmap(corr, vmax=1, square=True,
-                    annot=True if features < 12 else False)
+        sns.heatmap(corr, vmax=1, linewidths=.5, square=True,
+                    annot=True if features < 9 else False)
         plt.title('feature correlations in train_n dataset');
 
     def ordinal(self, y):
         """
         Plot ordinal features (categorical numeric) using Violin plot against target feature. Use this to determine outliers within ordinal features spread across associated target feature values.
         """
+        Base.data_n()
         plt.figure(figsize=(8,4))
         sns.violinplot(x=Base.target, y=y, data=Base.train_n)
         plt.xlabel(Base.target, fontsize=12)
@@ -80,6 +83,7 @@ class Plot(Base):
         """
         Plot continuous features (numeric) using scatter plot. Use this to determine outliers within continuous features.
         """
+        Base.data_n()
         plt.figure(figsize=(8,6))
         plt.scatter(range(Base.train_n.shape[0]), np.sort(Base.train_n[y].values))
         plt.xlabel('Samples', fontsize=12)
@@ -97,7 +101,7 @@ class Plot(Base):
         sns.barplot(x='Accuracy', y='Classifier', data=Base.model_ranking, color="b");
 
     def _create_feature_map(self, features):
-        outfile = open(Base.outpath + 'xgb.fmap', 'w')
+        outfile = open(Base._config['outpath'] + 'xgb.fmap', 'w')
         i = 0
         for feat in features:
             outfile.write('{0}\t{1}\tq\n'.format(i, feat))
@@ -124,6 +128,7 @@ class Plot(Base):
         """
         Plot importance of features based on ExtraTreesClassifier.
         """
+        Base.data_n()
         X = Base.train_n
         y = X[Base.target].copy()
         X = X.drop([Base.target], axis=1)
@@ -135,8 +140,9 @@ class Plot(Base):
         """
         Plot importance of features based on XGBoost.
         """
+        Base.data_n()
         X = Base.train_n
         X = X.drop([Base.target], axis=1)
         self._create_feature_map(X.columns)
-        fscore = Base.xgb_model.booster().get_fscore(fmap=Base.outpath + 'xgb.fmap')
+        fscore = Base.xgb_model.booster().get_fscore(fmap=Base._config['outpath'] + 'xgb.fmap')
         self._plot_importance(list(fscore.keys()), list(fscore.values()))
