@@ -10,6 +10,12 @@ The speedml.com_ website documents API use cases, behind-the-scenes implementati
 
 Latest Speedml release is always available on the PyPi_ website.
 
+On a clean system start by installing the awesome Anaconda Python distribution_.
+
+XGBoost is one of the most popular frameworks on Kaggle. Speedml makes it easy to get started with XGBoost::
+
+  conda install -c https://conda.anaconda.org/akode xgboost
+
 Install Speedml package using `pip` like so::
 
   pip install speedml
@@ -72,3 +78,4 @@ Hope you enjoy using Speedml in your projects. Watch this space as we intend to 
 .. _notebooks: https://github.com/Speedml/notebooks
 .. _Issues: https://github.com/Speedml/speedml/issues
 .. _notebook: https://github.com/Speedml/notebooks/blob/master/titanic/titanic-solution-using-speedml.ipynb
+.. _distribution: https://www.anaconda.com/download/
