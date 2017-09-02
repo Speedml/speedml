@@ -15,7 +15,7 @@ Install Speedml
 
 On a clean system start by installing the awesome Anaconda Python distribution_.
 
-XGBoost is one of the most popular frameworks on Kaggle. Speedml makes it easy to get started with XGBoost::
+XGBoost is one of the most popular frameworks used by winning solutions solving for Machine Learning competitions on Kaggle. Speedml makes it easy to get started with XGBoost::
 
   conda install -c https://conda.anaconda.org/akode xgboost
 
