@@ -10,6 +10,9 @@ The speedml.com_ website documents API use cases, behind-the-scenes implementati
 
 Latest Speedml release is always available on the PyPi_ website.
 
+Install Speedml
+---------------
+
 On a clean system start by installing the awesome Anaconda Python distribution_.
 
 XGBoost is one of the most popular frameworks on Kaggle. Speedml makes it easy to get started with XGBoost::
@@ -19,6 +22,9 @@ XGBoost is one of the most popular frameworks on Kaggle. Speedml makes it easy t
 Install Speedml package using `pip` like so::
 
   pip install speedml
+
+Docs and Demos
+--------------
 
 We manage the project on GitHub.
 
