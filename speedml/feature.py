@@ -6,8 +6,8 @@ from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 from builtins import *
 
-from speedml.base import Base
-from speedml.util import DataFrameImputer
+from .base import Base
+from .util import DataFrameImputer
 
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
