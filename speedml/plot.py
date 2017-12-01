@@ -144,5 +144,5 @@ class Plot(Base):
         X = Base.train_n
         X = X.drop([Base.target], axis=1)
         self._create_feature_map(X.columns)
-        fscore = Base.xgb_model.booster().get_fscore(fmap=Base._config['outpath'] + 'xgb.fmap')
+        fscore = Base.xgb_model.get_booster().get_fscore(fmap=Base._config['outpath'] + 'xgb.fmap')
         self._plot_importance(list(fscore.keys()), list(fscore.values()))
