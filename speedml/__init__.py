@@ -6,11 +6,11 @@ from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 from builtins import *
 
-from speedml.base import Base
-from speedml.plot import Plot
-from speedml.feature import Feature
-from speedml.xgb import Xgb
-from speedml.model import Model
+from .base import Base
+from .plot import Plot
+from .feature import Feature
+from .xgb import Xgb
+from .model import Model
 
 import numpy as np
 import pandas as pd

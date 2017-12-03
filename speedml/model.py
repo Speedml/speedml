@@ -6,7 +6,7 @@ from __future__ import (absolute_import, division,
                         print_function, unicode_literals)
 from builtins import *
 
-from speedml.base import Base
+from .base import Base
 
 import pandas as pd
 import numpy as np
