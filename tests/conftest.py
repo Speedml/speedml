@@ -4,8 +4,8 @@ import pytest
 def sml():
     from speedml import Speedml
     sml = Speedml(
-        train = '/Users/manavsehgal/Developer/speedml/tests/data/train.csv',
-        test = '/Users/manavsehgal/Developer/speedml/tests/data/test.csv',
+        train = 'tests/data/train.csv',
+        test = 'tests/data/test.csv',
         target = 'Survived',
         uid = 'PassengerId')
     yield sml
