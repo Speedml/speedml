@@ -210,3 +210,15 @@ class Feature(Base):
         Base.train = combine[0:Base.train.shape[0]]
         Base.test = combine[Base.train.shape[0]::]
         Base.test = Base.test.drop([Base.target], axis=1)
+
+    def apply(self, a, f, new=None):
+        Base.train[new if new else a] = Base.train[a].apply(f)
+        Base.test[new if new else a] = Base.train[a].apply(f)
+
+    def extractDate(self, a, prefix=None): # only supports yyyy-mm-dd formated string
+        self.extract(new='{}-year'.format(prefix if prefix else a), a=a, regex='(\d{4})\-\d{2}\-\d{2}')
+        self.apply('{}-year'.format(prefix if prefix else a), int)
+        self.extract(new='{}-month'.format(prefix if prefix else a), a=a, regex='\d{4}\-(\d{2})\-\d{2}')
+        self.apply('{}-month'.format(prefix if prefix else a), int)
+        self.extract(new='{}-day'.format(prefix if prefix else a), a=a, regex='\d{4}\-\d{2}\-(\d{2})')
+        self.apply('{}-day'.format(prefix if prefix else a), int)
