@@ -30,14 +30,18 @@ class Speedml(Base):
 
         Base.target = target
 
-        # TODO: Add more file formats supported by pandas.read_
-        if train.endswith('.csv'):
-            Base.train = pd.read_csv(train)
-            Base.test = pd.read_csv(test)
+        if isinstance(train, pd.DataFrame):
+            Base.train = train
+            Base.test = test
+        else:
+            # TODO: Add more file formats supported by pandas.read_
+            if train.endswith('.csv'):
+                Base.train = pd.read_csv(train)
+                Base.test = pd.read_csv(test)
 
-        if train.endswith('.json'):
-            Base.train = pd.read_json(train)
-            Base.test = pd.read_json(test)
+            if train.endswith('.json'):
+                Base.train = pd.read_json(train)
+                Base.test = pd.read_json(test)
 
         if not Base.train.empty and not Base.test.empty:
             if uid:
